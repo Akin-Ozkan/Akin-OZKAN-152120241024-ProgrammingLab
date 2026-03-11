@@ -27,7 +27,13 @@ void displayChain(Node* n){
 }
 
 void eraseData(Node** head_ref) {
-    if (*head_ref == nullptr) return;
+    if (*head_ref == nullptr){
+        cout << "Liste boş!\n";
+        return;
+
+    }
+
+
     Node* temp = *head_ref;
     *head_ref = (*head_ref)->next;
     delete temp;
@@ -52,6 +58,8 @@ int main()
         if(x == "UNDO")
         {
             eraseData(&head);
+            displayChain(head);
+            cout << endl;
             continue;
         }
 
