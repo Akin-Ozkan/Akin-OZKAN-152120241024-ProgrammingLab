@@ -99,8 +99,6 @@ void removeSong(Song* current)
     temporal->next = current->next;
     current->next = nullptr;
     delete current;
-
-
 }
 
 
@@ -155,7 +153,7 @@ int main()
     int status = 0;
     while(status != 4)
     {
-        cout << "1)Back, 2)Forward, 3)Delete, 4)Exit";
+        cout << "1)Back, 2)Forward, 3)Delete, 4)Display songs 5)Exit";
         cin >> status;
 
         switch(status)
@@ -167,6 +165,8 @@ int main()
             case 3:
                 removeSong(current);
             case 4:
+                displaySongs(head);
+            case 5:
                 removeMemory(head);
                 return 0;
         }
