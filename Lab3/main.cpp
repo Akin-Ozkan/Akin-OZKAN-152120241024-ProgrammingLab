@@ -61,7 +61,7 @@ void removeMemory(Song* head) {
     }
 }
 
-void listen(Song* current) //Next Prev fonksiyonu
+int listen(Song* current, int status) //Next Prev fonksiyonu
 {
 
 }
@@ -88,6 +88,11 @@ int main()
         if(title == "EXIT" || title == "exit")
         {
             removeMemory(head);
+            return 0;
+        }
+
+        if(title == "listen")
+        {
             break;
         }
 
@@ -116,10 +121,24 @@ int main()
     Song* current = new Song();
 
     int status = 0;
-    while(status != 3)
+    while(status != 4)
     {
-        current = listen(current);
+        cout << "1)Back, 2)Forward, 3)Delete, 4)Exit";
+        cin >> status;
+
+        switch()
+        {
+            case 1:
+                listen(current, status);
+            case 2:
+                listen(current, status);
+            case 3:
+                removeSong(current);
+            case 4:
+                removeMemory(head);
+                return 0;
+        }
     }
 
-    return 0;
+
 }
