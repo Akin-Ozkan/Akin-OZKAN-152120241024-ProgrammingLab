@@ -61,6 +61,17 @@ void removeMemory(Song* head) {
     }
 }
 
+void listen(Song* current) //Next Prev fonksiyonu
+{
+
+}
+
+void removeSong()
+{
+
+}
+
+
 int main()
 {
     Song* head = new Song();
@@ -101,5 +112,14 @@ int main()
 
         addSong(&head,title,artist,rating);
     }
+
+    Song* current = new Song();
+
+    int status = 0;
+    while(status != 3)
+    {
+        current = listen(current);
+    }
+
     return 0;
 }
