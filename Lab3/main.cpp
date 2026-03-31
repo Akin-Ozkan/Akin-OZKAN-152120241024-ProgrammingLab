@@ -7,53 +7,125 @@ struct Song{
     int rating[3];
     Song* next;
     Song* prev;
-    };
+};
 
-
-void addSong(Song** head, string songTitle, string nameArtist, int songRating[3])
+Song* appendSong(Song** head, Song** tail, string a, string b, int ratings[3])
 {
     Song* temporal = new Song();
-
-    temporal->title = songTitle;
-    temporal->artist = nameArtist;
+    temporal->title = a;
+    temporal->artist = b;
+    temporal->next = temporal->prev = NULL;
 
     for(int i = 0; i < 3; i++)
     {
-        temporal->rating[i] = songRating[i];
+        temporal->rating[i] = ratings[i];
     }
 
-
-    temporal->next = nullptr;
-
-
-    if(*head == nullptr)
+    if(*head == NULL)
     {
-        *head = temporal;
+        *head = *tail = temporal;
+    }
+
+    else{
+        (*tail)->next = temporal;
+        temporal->prev = *tail;
+        *tail = temporal;
+    }
+    return *tail;
+}
+
+void display(Song* head, Song* current)
+{
+    if(head == NULL)
+    {
+        cout << "List is empty." << endl;
+        return;
+    }
+    Song* music = head;
+    while(music != NULL)
+    {
+        if(current == music)
+        {
+            cout<< "[ ";
+        }
+        cout << music->title << " ";
+        for(int i = 0; i < 3; i++)
+        {
+            cout << music->rating[i] << " ";
+        }
+        if(current == music)
+        {
+            cout <<" ]" << " ";
+        }
+
+        if(music->next == NULL)
+        {
+            cout << endl << endl;
+            return;
+        }
+
+        cout << " <-> ";
+        music = music->next;
+    }
+}
+
+Song* removeSong(Song** head, Song** tail, Song* current) {
+    if (current == nullptr) return nullptr;
+
+    Song* prevNode = current->prev;
+    Song* nextNode = current->next;
+
+
+    if (prevNode != nullptr) {
+        prevNode->next = nextNode;
+    } else {
+        *head = nextNode;
+    }
+
+    if (nextNode != nullptr) {
+        nextNode->prev = prevNode;
+    } else {
+        *tail = prevNode;
+    }
+
+    Song* newCurrent = (nextNode != nullptr) ? nextNode : prevNode;
+
+    delete current;
+
+    return newCurrent;
+}
+
+void nextprev(int a, Song** current)
+{
+    if(*current == nullptr)
+    {
+        cout << "List is empty\n";
         return;
     }
 
-
-    while(temporal->next != nullptr)
+    if(a == 1)
     {
-        temporal = temporal->next;
-    }
-}
-
-void displaySongs(Song* head)
-{
-    Song* temporal = head;
-    while(temporal != nullptr){
-        cout << temporal->title << " " << temporal->artist << endl;
-        for(int i = 0; i < 3; i++)
+        if((*current)->next == nullptr)
         {
-            cout << temporal->rating[i] << endl;
+            cout << "This is the last song." << endl;
+            return;
         }
-        temporal = temporal->next;
+        else *current = (*current)->next;
     }
-    return;
+
+    else if(a == 0)
+    {
+        if((*current)->prev == nullptr)
+        {
+            cout << "This is the first song." << endl;
+            return;
+        }
+        else *current = (*current)->prev;
+    }
 }
 
-void removeMemory(Song* head) {
+void removeMemory(Song* head)
+{
     while (head != nullptr) {
         Song* silinecek = head;
         head = head->next;
@@ -61,114 +133,64 @@ void removeMemory(Song* head) {
     }
 }
 
-Song* listen(Song* current, int status) //Next Prev fonksiyonu
-{
-    if(status == 1)
-       {
-           if(current->prev == nullptr)
-           {
-               cout << "This is the first song." << endl;
-           }
-           else
-           {
-                current = current->prev;
-                return current;
-           }
-       }
-
-    if(status == 2)
-       {
-           if(current->next == nullptr)
-           {
-               cout << "This is the last song." << endl;
-           }
-           else
-           {
-                current = current->next;
-                return current;
-           }
-       }
-}
-
-void removeSong(Song* current)
-{
-    Song* temporal = new Song();
-    temporal = current->prev;
-
-    current->prev = nullptr;
-    temporal->next = current->next;
-    current->next = nullptr;
-    delete current;
-}
-
-
 int main()
 {
-    Song* head = new Song();
-    head = nullptr;
+    Song *head = NULL, *tail = NULL, *current = NULL;
 
-
-    string title = "START";
-    string artist;
-
-    while(title != "EXIT"){
+    string artistSong;
+    string titleSong;
+    while(titleSong != "EXIT"){
         cout << "Name of the song: ";
-        cin >> title;
+        getline(cin >> ws, titleSong);
+        cout << endl;
 
-        if(title == "EXIT" || title == "exit")
+        if(titleSong == "EXIT" || titleSong == "exit")
         {
             removeMemory(head);
             return 0;
         }
 
-        if(title == "listen")
+        else if(titleSong == "remove")
         {
-            break;
+            current = removeSong(&head, &tail, current);
+            continue;
         }
 
-        else if(title == "display")
+        else if(titleSong == "next")
         {
-            displaySongs(head);
+            nextprev(1, &current);
+            continue;
+        }
+
+        else if(titleSong == "prev")
+        {
+            nextprev(0, &current);
+            continue;
+        }
+
+        else if(titleSong == "display")
+        {
+            display(head, current);
             continue;
         }
 
         cout << endl << "Name of the artist: ";
-        cin >> artist;
+        getline(cin >> ws, artistSong);
+        cout << endl;
 
         int a;
-        int rating[3];
+        int ratings[3];
         for(int i = 0; i < 3; i++)
         {
             cout << (i+1) << ". critic: ";
             cin >> a;
-            rating[i] = a;
+            ratings[i] = a;
             cout << endl;
         }
-
-        addSong(&head,title,artist,rating);
-    }
-
-    Song* current = new Song();
-
-    int status = 0;
-    while(status != 4)
-    {
-        cout << "1)Back, 2)Forward, 3)Delete, 4)Display songs 5)Exit";
-        cin >> status;
-
-        switch(status)
+        tail = appendSong(&head, &tail, titleSong, artistSong, ratings);
+        if(current == NULL)
         {
-            case 1:
-                listen(current, status);
-            case 2:
-                listen(current, status);
-            case 3:
-                removeSong(current);
-            case 4:
-                displaySongs(head);
-            case 5:
-                removeMemory(head);
-                return 0;
+            current = head;
         }
     }
 }
