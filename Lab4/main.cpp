@@ -37,9 +37,28 @@ void push(Package** top)
     *top = temp;
 }
 
-enqueue()
+void enqueue()
 {
+    if(frontc == -1)
+    {
+        frontc == rearc == 0;
+    }
 
+    else if((rearc + 1) % 5 == frontc)
+    {
+        cout << "Queue is full.\n";
+        return;
+    }
+
+    rearc = (rear + 1) % 5;
+
+    cout << "Kurye Adi: ";
+    cin >> c[rearc].courierName;
+
+    cout << "Arac Tipi: ";
+    cin >> c[rearc].vehicleType;
+
+    cout << "Successfully added.\n";
 }
 
 pop()
